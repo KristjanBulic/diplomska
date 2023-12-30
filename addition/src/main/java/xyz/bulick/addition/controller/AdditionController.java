@@ -1,5 +1,6 @@
 package xyz.bulick.addition.controller;
 
+import io.opentelemetry.api.trace.Span;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,8 @@ public class AdditionController {
 
     @PostMapping(path = "/")
     public ResponseEntity<ResponseDTO> add(@RequestBody AdditionDTO dto) {
+        final var span = Span.current();
+        span.setAttribute("service.name", "addition");
         return ResponseEntity.ok(additionService.add(dto));
     }
 
