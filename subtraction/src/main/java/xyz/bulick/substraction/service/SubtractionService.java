@@ -11,12 +11,17 @@ import xyz.bulick.substraction.dto.SubtractionDTO;
 @Service
 public class SubtractionService {
 
+    private final RestTemplate restTemplate;
+
     private static final Logger log = LoggerFactory.getLogger("SubtractionService");
+
+    public SubtractionService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public ResponseDTO add(SubtractionDTO dto) {
         log.info("Received: {}", dto);
 
-        RestTemplate restTemplate = new RestTemplate();
         AdditionDTO additionDTO = new AdditionDTO(dto.firstNumber(), -dto.secondNumber());
         final var result = restTemplate.postForObject("http://localhost:8080/", additionDTO, ResponseDTO.class);
 
