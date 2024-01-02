@@ -5,14 +5,26 @@ receivers:
 
 exporters:
   logging:
-    loglevel: "debug"
+    verbosity: detailed
+
   otlp/jaeger:
     endpoint: jaeger:4317
+    tls:
+      insecure: true
+
+  otlp/loki:
+    endpoint: loki:3100
     tls:
       insecure: true
 
 service:
   pipelines:
     traces:
-      receivers: [otlp]
-      exporters: [logging, otlp/jaeger]
+      receivers: [ otlp ]
+      exporters: [ logging, otlp/jaeger ]
+    metrics:
+      receivers: [ otlp ]
+      exporters: [ logging ]
+    logs:
+      receivers: [ otlp ]
+      exporters: [ logging, otlp/loki ]
